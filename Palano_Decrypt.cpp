@@ -55,11 +55,8 @@ void interParam(int argc, char** argv, char** param){
             exit(EXIT_FAILURE ); 
          }   
     }
-
     param[0] = file;
     param[1] = chiave;
-   
-    
 }
 
 void initAlfa(char* a){
@@ -91,47 +88,6 @@ int getIndex(char chr, char* str){
    return index; 
 }
 
-char* getStringCrypt(char* str, char aShift[][26], char* alfa, int lenkey){
-    char* cryptStr = new char[strlen(str) + 1]; //Salvo la variabile nell'heap per evitare danni con il push/pop;
-    bzero(cryptStr, strlen(str));
-    cryptStr[strlen(cryptStr)] = '\0';
-    int inK = -1;
-    for (int i = 0; i < strlen(str); ++i){ 
-        //Gestione caratteri non contenuti nell'alfabeto
-        if (str[i] == '\n'){
-            cryptStr[i] = '\n';
-        }
-
-        else if (str[i] >= ' ' && str[i] <= '@'){
-            cryptStr[i] = str[i];
-        }
-
-        else if (str[i] >= '[' && str[i] <= 96 /*Il 96 sarebbe l'accento grave */){
-            cryptStr[i] = str[i];
-        }
-
-        else if (str[i] >= '{' && str[i] <= '~'){
-            cryptStr[i] = str[i];
-        }
-
-        //Gestione caratteri contenuti nell'alfabeto
-        else {
-            inK = (inK + 1) % lenkey; //Calcolo di quale alfabeto shiftato devo utilizzare (dopo l'utilizzo dell'ultmo devo ricominciare con il primo)
-            bool isMin = str[i] >= 'a' && str[i] <= 'z' ? true : false;
-            if (!isMin){ //costrutto per gestire lettere minuscole
-                int index = getIndex(str[i], alfa); //ottengo il numero dell'alfabeto NORMALE della iEsima lettera della stringa da cifrare
-                cryptStr[i] = aShift[inK][index];
-            }
-            else { //i - ' ' ed i + ' ' sono per gestire le lettere minuscole perchè l'alfabeto generato è tutto in maiuscolo (' ' = 32(base 10))
-                int index = getIndex(str[i] - ' ', alfa); //ottengo il numero dell'alfabeto NORMALE della iEsima lettera della stringa da cifrare
-                cryptStr[i] = aShift[inK][index] + ' ';
-            }
-        }
-    }
-    cryptStr[strlen(str)] = '\0';
-    return cryptStr;
-}
-
 char* getStringDecrypt(char* str, char aShift[][26], char* alfa, int lenkey){
     char* decryptStr = new char[strlen(str) + 1]; //Salvo la variabile nell'heap per evitare danni con il push/pop;
     bzero(decryptStr, strlen(str));
@@ -146,8 +102,6 @@ char* getStringDecrypt(char* str, char aShift[][26], char* alfa, int lenkey){
         else if (str[i] >= ' ' && str[i] <= '@'){
             decryptStr[i] = str[i];
         }
-
-        
 
         else if (str[i] >= '[' && str[i] <= 96 /*Il 96 sarebbe l'accento grave */){
             decryptStr[i] = str[i];

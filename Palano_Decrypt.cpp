@@ -153,6 +153,7 @@ void decryptFile(char* filename, char aShift[][26], char* alfa, int lenkey){
         if (strlen(tmp) > 0){
             char* strDecrypt = getStringDecrypt(tmp, aShift, alfa, lenkey);
             fprintf(fDecrypt, "%s", strDecrypt);
+            delete(strDecrypt);
         }
         bzero(tmp, 254);
         tmp[255] = '\0';
